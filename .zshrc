@@ -85,6 +85,9 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 # Node module path
 export PATH="$PATH:$HOME/.node/bin:$PATH"
 
+# yarn path
+export PATH="$PATH:$HOME/node_modules/.bin:$PATH"
+
 # NVM path
 . ~/.nvm/nvm.sh
 
@@ -97,10 +100,12 @@ set -o vi
 bindkey "^R" history-incremental-search-backward
 
 alias vim='/usr/local/bin/vim'
-
+alias ctags="`brew --prefix`/bin/ctags"
+alias github=git
 # Auto-completion for lunchy
 # LUNCHY_DIR=$(dirname `gem which lunchy`)/../extras
 #   if [ -f $LUNCHY_DIR/lunchy-completion.zsh ]; then
 #     . $LUNCHY_DIR/lunchy-completion.zsh
 #   fi
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
+export PATH="$PATH:`yarn global bin`"
