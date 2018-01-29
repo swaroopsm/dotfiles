@@ -1,13 +1,15 @@
 [user]
   # TODO: Edit the email
 	email = swaroop.striker@gmail.com
-	name = Swaroop SM
+	name = Swaroop Sethumadhavan
 [alias]
   s=status
   a=add
   co=checkout
   go=commit
   lg=log --oneline
+  history=log -p --
+  resetOrigin=reset --hard origin/master
 [color]
   branch = auto
   diff = auto

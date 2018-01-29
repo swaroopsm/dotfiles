@@ -180,6 +180,10 @@ nnoremap <Leader>> <C-w><Right>
 noremap <Leader><Leader><Right> gt
 noremap <Leader><Leader><Left> gT
 
+" Copy and Paste
+noremap <Leader>y "+y
+noremap <Leader>p "+gp
+
 " Autoload for erb files
 au FileType eruby nnoremap <Leader>ss i <%=  %><Esc>2hi
 
