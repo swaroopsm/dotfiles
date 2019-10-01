@@ -39,7 +39,8 @@ set nolist  " list disables linebreak
 set statusline+=%#warningmsg#
 set statusline+=%*
 set autoread
-" set termguicolors
+set termguicolors
+set background=dark
 
 filetype plugin indent on
 syntax enable
@@ -63,12 +64,29 @@ Plug 'scrooloose/nerdtree'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'jiangmiao/auto-pairs'
-" Plug 'SirVer/ultisnips'  
+Plug 'SirVer/ultisnips'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'joshdick/onedark.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'icymind/NeoSolarized'
+Plug 'tpope/vim-fugitive'
+Plug 'prettier/vim-prettier'
+Plug 'mattn/emmet-vim'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'rbong/vim-flog'
+Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'tpope/vim-rhubarb'
+Plug 'justinmk/vim-sneak'
+Plug 'MaxMEllon/vim-jsx-pretty'
 
 call plug#end()
 
+
 let mapleader = "\<Space>"
+
+" Colorscheme
+colorscheme NeoSolarized
 
 " Syntax Highligh For EJS
 au BufNewFile,BufRead *.ejs set filetype=html
@@ -91,10 +109,35 @@ nnoremap <Leader>c gcc
 
 " Autocomplete
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#file#enable_buffer_path = 1
 
 " Quick search
 nmap <Leader>f :GFiles<Enter>
+nmap <Leader>t :Files<Enter>
 
 " Deoplete use tab for forward / backward
 inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+
+" Ale supported linters
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+
+" Ultisnips
+let g:UltiSnipsExpandTrigger = "<c-e>"
+let g:UltiSnipsSnippetsDir="/Users/swaroop.sethumadhav/Personal/theforgesmith/website/UltiSnips/"
+
+" Neosnippets Mappings
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+let g:neosnippet#snippets_directory='~/Personal/vin-snippets'
+
+" FORMATTERS
+au FileType javascript setlocal formatprg=prettier
+au FileType javascript.jsx setlocal formatprg=prettier
+au FileType typescript setlocal formatprg=prettier\ --parser\ typescript
+au FileType html setlocal formatprg=js-beautify\ --type\ html
+au FileType scss setlocal formatprg=prettier\ --parser\ css
+au FileType css setlocal formatprg=prettier\ --parser\ css

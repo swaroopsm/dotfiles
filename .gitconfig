@@ -27,3 +27,12 @@
   added = yellow
   changed = yellow
   untracked = cyan
+[core]
+  #TODO: Edit username
+  excludesfile = /Users/<username>/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[commit]
+  #TODO: Edit username
+	template = /Users/<username>/.stCommitMsg
