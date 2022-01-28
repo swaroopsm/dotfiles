@@ -1,7 +1,6 @@
 [user]
-  # TODO: Edit the email
-	email = swaroop.striker@gmail.com
 	name = Swaroop Sethumadhavan
+	; email = youremail@example.com
 [alias]
   s=status
   a=add
@@ -27,12 +26,18 @@
   added = yellow
   changed = yellow
   untracked = cyan
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 [core]
-  #TODO: Edit username
-  excludesfile = /Users/<username>/.gitignore_global
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[commit]
-  #TODO: Edit username
-	template = /Users/<username>/.stCommitMsg
+	commitGraph = true
+	; path to global_ignore
+	; excludesfile = /Users/me/.gitignore_global
+[diff]
+	algorithm = patience
+[gc]
+	writeCommitGraph = true
+[protocol]
+	version = 2
