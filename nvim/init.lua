@@ -52,7 +52,6 @@ require('packer').startup(function(use)
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
   use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
-  use 'tpope/vim-sleuth' -- Detect tabstop and shiftwidth automatically
 
   -- Formatting & Linting
   use 'jose-elias-alvarez/null-ls.nvim'
@@ -67,6 +66,8 @@ require('packer').startup(function(use)
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
+
+  use { 'preservim/nerdtree' }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
@@ -100,6 +101,10 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   pattern = vim.fn.expand '$MYVIMRC',
 })
 
+vim.api.nvim_create_autocmd('BufWritePost', {
+  command = 'lua vim.lsp.buf.format()',
+})
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
@@ -125,6 +130,10 @@ vim.o.smartcase = true
 -- Decrease update time
 vim.o.updatetime = 250
 vim.wo.signcolumn = 'yes'
+vim.o.cindent = true
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+vim.o.shiftround = true
 
 -- Set colorscheme
 vim.o.termguicolors = true
@@ -338,6 +347,8 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+
+
 end
 
 -- Enable the following language servers
@@ -437,13 +448,18 @@ cmp.setup {
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
-    null_ls.builtins.formatting.stylua,
+    -- null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.diagnostics.eslint_d,
     null_ls.builtins.completion.spell,
     null_ls.builtins.code_actions.eslint,
   },
 })
+
+-- NerdTree
+vim.keymap.set('n', '<leader>ww', ':NERDTreeFind<CR>')
+
+
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
