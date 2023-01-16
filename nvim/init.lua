@@ -28,7 +28,7 @@ require('packer').startup(function(use)
 
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
-    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-path' },
   }
 
   use { -- Highlight, edit, and navigate code
@@ -68,6 +68,10 @@ require('packer').startup(function(use)
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
 
   use { 'preservim/nerdtree' }
+
+  use 'shaunsingh/solarized.nvim'
+
+  use 'tpope/vim-surround'
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
@@ -134,6 +138,11 @@ vim.o.cindent = true
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 vim.o.shiftround = true
+vim.o.swapfile = false
+vim.o.backup = false
+vim.o.writebackup = false
+vim.o.expandtab = true
+vim.o.background = 'dark'
 
 -- Set colorscheme
 vim.o.termguicolors = true
@@ -445,15 +454,25 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'emmet-ls' }
   },
 }
+
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
 
 -- Formatting & Linting
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
     -- null_ls.builtins.formatting.stylua,
-    null_ls.builtins.formatting.prettier,
+    null_ls.builtins.formatting.prettierd,
     null_ls.builtins.diagnostics.eslint_d,
     null_ls.builtins.completion.spell,
     null_ls.builtins.code_actions.eslint,
@@ -461,9 +480,7 @@ null_ls.setup({
 })
 
 -- NerdTree
-vim.keymap.set('n', '<leader>ww', ':NERDTreeFind<CR>')
-
-
+vim.keymap.set('n', '<leader>wj', ':NERDTreeFind<CR>')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
