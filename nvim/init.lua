@@ -73,6 +73,10 @@ require('packer').startup(function(use)
 
   use 'tpope/vim-surround'
 
+  use 'JoosepAlviste/nvim-ts-context-commentstring'
+
+  use 'WhoIsSethDaniel/mason-tool-installer.nvim'
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then
@@ -189,7 +193,10 @@ require('lualine').setup {
 }
 
 -- Enable Comment.nvim
-require('Comment').setup()
+-- require('Comment').setup()
+require('Comment').setup {
+  pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+}
 
 -- Enable `lukas-reineke/indent-blankline.nvim`
 -- See `:help indent_blankline.txt`
@@ -253,6 +260,11 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'help' },
+
+  context_commentstring = {
+    enable = true,
+    enable_autocmd = false,
+  },
 
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
@@ -374,9 +386,12 @@ local servers = {
   -- gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
-  -- tsserver = {},
+  tsserver = {},
+  tailwindcss = {},
+  terraform_lsp = {},
+  eslint = {},
 
-  sumneko_lua = {
+  lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
@@ -401,6 +416,7 @@ mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
 }
 
+
 mason_lspconfig.setup_handlers {
   function(server_name)
     require('lspconfig')[server_name].setup {
@@ -409,6 +425,16 @@ mason_lspconfig.setup_handlers {
       settings = servers[server_name],
     }
   end,
+}
+
+require('mason-tool-installer').setup {
+  ensure_installed = {
+    'prettierd',
+    'eslint_d'
+  },
+  auto_update = true,
+  run_on_start = true,
+  debounce_hours = 5,
 }
 
 -- Turn on lsp status information
@@ -457,15 +483,6 @@ cmp.setup {
     { name = 'emmet-ls' }
   },
 }
-
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    { name = 'cmdline' }
-  })
-})
 
 -- Formatting & Linting
 local null_ls = require("null-ls")
